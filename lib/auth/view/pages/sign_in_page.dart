@@ -1,24 +1,24 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:map_app_test/auth/auth.dart';
 import 'package:map_app_test/auth/bloc/auth_bloc.dart';
-import 'package:map_app_test/auth/view/pages/sign_in_page.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class SignInPage extends StatefulWidget {
+  const SignInPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<SignInPage> createState() => _SignInPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void _createUserWithEmailAndPassword(BuildContext context) {
+  void _signInUserWithEmailAndPassword(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      BlocProvider.of<AuthBloc>(context).add(SignUpRequested(
+      BlocProvider.of<AuthBloc>(context).add(SignInRequested(
         _emailController.text,
         _passwordController.text,
       ));
@@ -60,12 +60,8 @@ class _SignUpPageState extends State<SignUpPage> {
             }
           },
           builder: (context, state) {
-            // move to MapScreen
-
             if (state is Loading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const CircularProgressIndicator();
             }
             if (state is UnAuthenticated) {
               return Center(
@@ -79,7 +75,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         children: [
                           TextFormField(
                             controller: _emailController,
-                            style: const TextStyle(fontSize: 16.0, height: 1),
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
@@ -111,7 +106,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                               ),
                               onPressed: () {
-                                _createUserWithEmailAndPassword(context);
+                                _signInUserWithEmailAndPassword(context);
                               },
                               child: const Text('Sign Up'),
                             ),
@@ -133,9 +128,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     RichText(
                       text: TextSpan(
                         children: [
-                          const TextSpan(text: 'Already have an account? '),
+                          const TextSpan(text: 'Dont have an account? '),
                           TextSpan(
-                            text: 'Sign in',
+                            text: 'Sign up',
                             style: const TextStyle(color: Colors.blueAccent),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
@@ -143,9 +138,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const SignInPage()));
+                                            const SignUpPage()));
                               },
-                          ),
+                          )
                         ],
                       ),
                     )
