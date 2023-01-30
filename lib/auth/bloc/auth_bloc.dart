@@ -13,6 +13,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         super(UnAuthenticated()) {
     on<SignUpRequested>(_onSignUpRequested);
     on<SignInRequested>(_onSignInRequested);
+    on<GoogleSignInRequested>(_onGoogleSignInRequested);
     on<SignOutRequested>(_onSignOutRequested);
   }
 
@@ -24,6 +25,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       await _authRepository.signUp(
           email: event.email, password: event.password);
+      emit(Authenticated());
+    } catch (e) {
+      emit(AuthError(e.toString()));
+      emit(UnAuthenticated());
+    }
+  }
+
+  Future<void> _onGoogleSignInRequested(
+      GoogleSignInRequested event, Emitter<AuthState> emit) async {
+    emit(Loading());
+    try {
+      await _authRepository.signInWithGoogle();
       emit(Authenticated());
     } catch (e) {
       emit(AuthError(e.toString()));
