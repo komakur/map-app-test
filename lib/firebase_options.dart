@@ -70,6 +70,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '636588639967',
     projectId: 'map-app-test-86db6',
     storageBucket: 'map-app-test-86db6.appspot.com',
+    androidClientId: '636588639967-ap512l9senfo8c52pi5prjo6rpkh8iqm.apps.googleusercontent.com',
     iosClientId: '636588639967-5eknokge2g4a8e7nc4dml41avjd0c8jq.apps.googleusercontent.com',
     iosBundleId: 'com.example.mapAppTest',
   );
