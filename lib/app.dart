@@ -1,8 +1,8 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:map_app_test/auth/bloc/auth_bloc.dart';
-import 'package:map_app_test/data/repositories/auth_repository.dart';
 
+import 'package:map_app_test/auth/bloc/auth_bloc.dart';
 import 'package:map_app_test/auth/view/pages/sign_up_page.dart';
 
 class App extends StatelessWidget {
