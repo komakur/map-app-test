@@ -1,5 +1,5 @@
 name: map_app_test
-description: App that shows current users location on  a map
+description: App that shows current users location on a map
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -13,6 +13,9 @@ environment:
 
 
 dependencies:
+  authentication_repository:
+    path: packages/authentication_repository
+  bloc: ^8.1.0
   flutter:
     sdk: flutter
 
