@@ -15,9 +15,14 @@ environment:
 dependencies:
   authentication_repository:
     path: packages/authentication_repository
+  user_repository:
+    path: packages/user_repository
+  geolocation_repository:
+    path: packages/geolocation_repository
   bloc: ^8.1.0
   flutter:
     sdk: flutter
+  flow_builder: ^0.0.9
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -28,6 +33,9 @@ dependencies:
   flutter_bloc: ^8.1.1
   equatable: ^2.0.5
   google_sign_in: ^5.4.4
+  geolocator: ^9.0.2
+  google_maps_flutter: ^2.2.3
+  
 
 dev_dependencies:
   flutter_test:
