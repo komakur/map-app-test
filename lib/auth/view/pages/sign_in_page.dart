@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:map_app_test/auth/auth.dart';
 import 'package:map_app_test/auth/bloc/auth_bloc.dart';
+import 'package:map_app_test/map/map_screen.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -46,14 +47,14 @@ class _SignInPageState extends State<SignInPage> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
-            // if (state is Authenticated) {
-            //   Navigator.pushReplacement(
-            //     context,
-            //     MaterialPageRoute(
-            //       builder: (context) => const MapScreen(),
-            //     ),
-            //   );
-            // }
+            if (state is Authenticated) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MapPage(),
+                ),
+              );
+            }
             if (state is AuthError) {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text(state.error)));

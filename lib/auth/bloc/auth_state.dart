@@ -9,7 +9,14 @@ abstract class AuthState extends Equatable {
 
 class Loading extends AuthState {}
 
-class Authenticated extends AuthState {}
+class Authenticated extends AuthState {
+  final firebase_auth.User firebaseUser;
+
+  const Authenticated(this.firebaseUser);
+
+  @override
+  List<Object> get props => [firebaseUser];
+}
 
 class UnAuthenticated extends AuthState {}
 

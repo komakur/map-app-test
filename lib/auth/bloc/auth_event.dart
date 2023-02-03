@@ -14,7 +14,6 @@ class SignUpRequested extends AuthEvent {
   const SignUpRequested(this.email, this.password);
 }
 
-// TODO change to LogIn or ...
 class SignInRequested extends AuthEvent {
   final String email;
   final String password;

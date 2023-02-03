@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:map_app_test/auth/bloc/auth_bloc.dart';
 import 'package:map_app_test/auth/view/pages/sign_in_page.dart';
+import 'package:map_app_test/map/map_screen.dart';
+import 'package:map_app_test/user/bloc/user_bloc.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -46,14 +48,18 @@ class _SignUpPageState extends State<SignUpPage> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
-            // if (state is Authenticated) {
-            //   Navigator.pushReplacement(
-            //     context,
-            //     MaterialPageRoute(
-            //       builder: (context) => const MapScreen(),
-            //     ),
-            //   );
-            // }
+            if (state is Authenticated) {
+              BlocProvider.of<UserBloc>(context).add(WriteUser(
+                  state.firebaseUser.uid, state.firebaseUser.photoURL,
+                  email: state.firebaseUser.email!, longitude: 0, latitude: 0));
+
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MapPage(),
+                ),
+              );
+            }
             if (state is AuthError) {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text(state.error)));

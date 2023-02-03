@@ -1,14 +1,21 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:equatable/equatable.dart';
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:user_repository/user_repository.dart';
+
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
+  final UserRepository _userRepository;
 
-  AuthBloc({required AuthRepository authRepository})
-      : _authRepository = authRepository,
+  AuthBloc({
+    required AuthRepository authRepository,
+    required UserRepository userRepository,
+  })  : _authRepository = authRepository,
+        _userRepository = userRepository,
         super(UnAuthenticated()) {
     on<SignUpRequested>(_onSignUpRequested);
     on<SignInRequested>(_onSignInRequested);
@@ -24,7 +31,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       await _authRepository.signUp(
           email: event.email, password: event.password);
-      emit(Authenticated());
+      emit(Authenticated(_authRepository.getUser()));
     } catch (e) {
       emit(AuthError(e.toString()));
       emit(UnAuthenticated());
@@ -36,7 +43,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(Loading());
     try {
       await _authRepository.signInWithGoogle();
-      emit(Authenticated());
+      emit(Authenticated(_authRepository.getUser()));
     } catch (e) {
       emit(AuthError(e.toString()));
       emit(UnAuthenticated());
@@ -51,7 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       await _authRepository.signIn(
           email: event.email, password: event.password);
-      emit(Authenticated());
+      emit(Authenticated(_authRepository.getUser()));
     } catch (e) {
       emit(AuthError(e.toString()));
       emit(UnAuthenticated());
