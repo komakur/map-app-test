@@ -1,19 +1,19 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthRepository {
-  final _firebaseAuth = FirebaseAuth.instance;
+  final _firebaseAuth = firebase_auth.FirebaseAuth.instance;
 
   Future<void> signUp({
     required String email,
     required String password,
   }) async {
     try {
-      await FirebaseAuth.instance
+      await firebase_auth.FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
-    } on FirebaseAuthException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw Exception('The password provided is too weak');
       } else if (e.code == 'email-already-in-use') {
@@ -29,9 +29,9 @@ class AuthRepository {
     required String password,
   }) async {
     try {
-      await FirebaseAuth.instance
+      await firebase_auth.FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-    } on FirebaseAuthException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw Exception('No user found for that email');
       } else if (e.code == 'wrong-password') {
@@ -47,12 +47,13 @@ class AuthRepository {
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
 
-      final credential = GoogleAuthProvider.credential(
+      final credential = firebase_auth.GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      await firebase_auth.FirebaseAuth.instance
+          .signInWithCredential(credential);
     } catch (e) {
       throw Exception(e.toString());
     }
@@ -64,5 +65,14 @@ class AuthRepository {
     } catch (e) {
       throw Exception(e);
     }
+  }
+
+  bool isSignedIn() {
+    final currentUser = _firebaseAuth.currentUser;
+    return currentUser != null;
+  }
+
+  firebase_auth.User getUser() {
+    return _firebaseAuth.currentUser!;
   }
 }
