@@ -25,16 +25,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           .whenComplete(() => emit(UserSuccess()));
     });
     on<LoadUsers>(
-      (event, emit) {
+      (event, emit) async {
         _userSubscription?.cancel();
-        _userSubscription = _userRepository
-            .getAllUsers()
-            .listen((users) => add(UpdateUsers(users)));
-      },
-    );
-    on<UpdateUsers>(
-      (event, emit) {
-        emit(UserLoaded(users: event.users));
+        final users = await _userRepository.getAllUsers();
+        emit(UsersLoaded(users: users));
       },
     );
   }

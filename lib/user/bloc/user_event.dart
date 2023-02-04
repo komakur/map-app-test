@@ -12,13 +12,13 @@ class WriteUser extends UserEvent {
   final double longitude;
   final double latitude;
   final String uuid;
-  final String? avatarUrl;
+  final String avatarUrl;
 
   const WriteUser(this.uuid, this.avatarUrl,
       {required this.email, required this.longitude, required this.latitude});
 
   @override
-  List<Object> get props => [email, longitude, latitude, uuid, avatarUrl ?? ''];
+  List<Object> get props => [email, longitude, latitude, uuid, avatarUrl];
 }
 
 class LoadUsers extends UserEvent {}
