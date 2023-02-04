@@ -8,11 +8,14 @@ part 'user.g.dart';
 class User extends Equatable {
   final String uuid;
   final String email;
-  final String? avatarUrl;
+  final String avatarUrl;
   final Location? location;
 
   User(
-      {required this.uuid, required this.email, this.avatarUrl, this.location});
+      {required this.uuid,
+      required this.email,
+      this.avatarUrl = '',
+      this.location});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

@@ -50,7 +50,7 @@ class _SignUpPageState extends State<SignUpPage> {
           listener: (context, state) {
             if (state is Authenticated) {
               BlocProvider.of<UserBloc>(context).add(WriteUser(
-                  state.firebaseUser.uid, state.firebaseUser.photoURL,
+                  state.firebaseUser.uid, state.firebaseUser.photoURL ?? '',
                   email: state.firebaseUser.email!, longitude: 0, latitude: 0));
 
               Navigator.pushReplacement(
