@@ -21,13 +21,8 @@ class UserRepository {
     return User.fromJson(docSnap.data()! as Map<String, dynamic>);
   }
 
-  // TODO: change to immutable list
-  Future<List<User>> getAllUsers() async {
-    List<User> users = [];
-    final us = await _firebaseFirestore.collection('users').get();
-    us.docs.forEach((element) {
-      return users.add(User.fromJson(element.data()));
-    });
-    return users;
+  Stream<List<User>> getUsersStream() {
+    return _firebaseFirestore.collection('users').snapshots().map(
+        (event) => event.docs.map((e) => User.fromJson(e.data())).toList());
   }
 }

@@ -17,6 +17,8 @@ class UsersLoaded extends UserState {
   List<Object> get props => [users];
 }
 
+class UsersListening extends UserState {}
+
 class UserLoading extends UserState {}
 
 class UserSuccess extends UserState {}

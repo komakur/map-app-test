@@ -12,24 +12,25 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   StreamSubscription? _userSubscription;
   UserBloc({required UserRepository userRepository})
       : _userRepository = userRepository,
-        super(UserInitial()) {
+        super(UserLoading()) {
     on<WriteUser>((event, emit) async {
-      emit(UserLoading());
-      await _userRepository
-          .addUserToFirestore(User(
-              uuid: event.uuid,
-              email: event.email,
-              location: Location(
-                  latitude: event.latitude, longitude: event.longitude),
-              avatarUrl: event.avatarUrl))
-          .whenComplete(() => emit(UserSuccess()));
+      await _userRepository.addUserToFirestore(User(
+          uuid: event.uuid,
+          email: event.email,
+          location:
+              Location(latitude: event.latitude, longitude: event.longitude),
+          avatarUrl: event.avatarUrl));
     });
     on<LoadUsers>(
       (event, emit) async {
         _userSubscription?.cancel();
-        final users = await _userRepository.getAllUsers();
-        emit(UsersLoaded(users: users));
+        final users = await _userRepository
+            .getUsersStream()
+            .listen((users) => add(UpdateUsers(users)));
       },
     );
+    on<UpdateUsers>((event, emit) {
+      emit(UsersLoaded(users: event.users));
+    });
   }
 }
