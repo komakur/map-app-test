@@ -9,7 +9,7 @@ part of 'user.dart';
 User _$UserFromJson(Map<String, dynamic> json) => User(
       uuid: json['uuid'] as String,
       email: json['email'] as String,
-      avatarUrl: json['avatarUrl'] as String?,
+      avatarUrl: json['avatarUrl'] as String? ?? '',
       location: json['location'] == null
           ? null
           : Location.fromJson(json['location'] as Map<String, dynamic>),
