@@ -22,7 +22,7 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   StreamSubscription? _getPositionSubscription;
-
+  List<Marker> _markers = [];
   List<Marker> _markersFromUsers(List<User> users) => users
       .map<Marker>(
         (user) => Marker(
@@ -35,15 +35,15 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
+
     _getPositionSubscription = Geolocator.getPositionStream().listen((event) {
+      BlocProvider.of<UserBloc>(context).add(LoadUsers());
       BlocProvider.of<GeolocaitonBloc>(context).add(LoadGeolocation());
-      BlocProvider.of<UserBloc>(context)
-        ..add(WriteUser(
-            firebase_auth.FirebaseAuth.instance.currentUser!.uid, '',
-            email: firebase_auth.FirebaseAuth.instance.currentUser!.email!,
-            longitude: event.longitude,
-            latitude: event.latitude))
-        ..add(LoadUsers());
+      BlocProvider.of<UserBloc>(context).add(WriteUser(
+          firebase_auth.FirebaseAuth.instance.currentUser!.uid, '',
+          email: firebase_auth.FirebaseAuth.instance.currentUser!.email!,
+          longitude: event.longitude,
+          latitude: event.latitude));
     });
   }
 
@@ -73,6 +73,9 @@ class _MapPageState extends State<MapPage> {
           } else if (geolocationState is GeolocaitonLoaded) {
             return BlocBuilder<UserBloc, UserState>(
               builder: (context, state) {
+                if (state is UserLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
                 if (state is UsersLoaded) {
                   List<User> users = state.users;
                   final markers = _markersFromUsers(users);
@@ -86,7 +89,7 @@ class _MapPageState extends State<MapPage> {
                     markers: markers.toSet(),
                   );
                 }
-                return const SizedBox.shrink();
+                return const Center(child: Text('Something went wrong'));
               },
             );
           } else {
