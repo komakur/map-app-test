@@ -1,5 +1,5 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:user_repository/user_repository.dart';
 
 class ProfileSidebar extends StatelessWidget {
   final User user;
@@ -11,16 +11,9 @@ class ProfileSidebar extends StatelessWidget {
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text(user.uuid),
-            accountEmail: Text('${user.email}'),
-            decoration: const BoxDecoration(
-              color: Colors.blue,
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: NetworkImage(
-                    'https://oflutter.com/wp-content/uploads/2021/02/profile-bg3.jpg'),
-              ),
-            ),
+            accountName: Text(user.username),
+            accountEmail: Text(user.email),
+            currentAccountPicture: Image.network(user.avatarUrl),
           ),
         ],
       ),

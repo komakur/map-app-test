@@ -7,8 +7,6 @@ abstract class UserState extends Equatable {
   List<Object> get props => [];
 }
 
-class UserInitial extends UserState {}
-
 class UsersLoaded extends UserState {
   final List<User> users;
   const UsersLoaded({this.users = const <User>[]});

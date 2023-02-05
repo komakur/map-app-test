@@ -1,7 +1,4 @@
 import 'dart:async';
-
-import 'package:authentication_repository/authentication_repository.dart'
-    as auth_repository;
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,12 +19,14 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   StreamSubscription? _getPositionSubscription;
-  List<Marker> _markers = [];
+  User? _user;
+
   List<Marker> _markersFromUsers(List<User> users) => users
       .map<Marker>(
         (user) => Marker(
           markerId: MarkerId(user.uuid),
-          position: LatLng(user.location!.latitude, user.location!.longitude),
+          infoWindow: InfoWindow(title: user.username, snippet: user.email),
+          position: LatLng(user.location.latitude, user.location.longitude),
         ),
       )
       .toList();
@@ -35,7 +34,8 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-
+    final currentUser = firebase_auth.FirebaseAuth.instance.currentUser!;
+    _user = User(email: currentUser.email!, uuid: currentUser.uid);
     _getPositionSubscription = Geolocator.getPositionStream().listen((event) {
       BlocProvider.of<UserBloc>(context).add(LoadUsers());
       BlocProvider.of<GeolocaitonBloc>(context).add(LoadGeolocation());
@@ -57,40 +57,47 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.settings),
-          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-        ),
-      ),
-      drawer: ProfileSidebar(
-          user: auth_repository.User.fromFirebaseUser(
-              context.read<auth_repository.AuthRepository>().getUser())),
+      drawer: ProfileSidebar(user: _user!),
       body: BlocBuilder<GeolocaitonBloc, GeolocaitonState>(
         builder: (context, geolocationState) {
           if (geolocationState is GeolocaitonLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (geolocationState is GeolocaitonLoaded) {
-            return BlocBuilder<UserBloc, UserState>(
-              builder: (context, state) {
-                if (state is UserLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (state is UsersLoaded) {
-                  List<User> users = state.users;
-                  final markers = _markersFromUsers(users);
-                  return GoogleMap(
-                    myLocationEnabled: true,
-                    myLocationButtonEnabled: true,
-                    initialCameraPosition: CameraPosition(
-                        target: LatLng(geolocationState.position.latitude,
-                            geolocationState.position.longitude),
-                        zoom: 5),
-                    markers: markers.toSet(),
-                  );
-                }
-                return const Center(child: Text('Something went wrong'));
-              },
+            return Stack(
+              children: [
+                BlocBuilder<UserBloc, UserState>(
+                  builder: (context, state) {
+                    if (state is UserLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (state is UsersLoaded) {
+                      List<User> users = state.users;
+                      final markers = _markersFromUsers(users);
+                      return GoogleMap(
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: true,
+                        initialCameraPosition: CameraPosition(
+                            target: LatLng(geolocationState.position.latitude,
+                                geolocationState.position.longitude),
+                            zoom: 5),
+                        markers: markers.toSet(),
+                      );
+                    }
+                    return const Center(child: Text('Something went wrong'));
+                  },
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                      onPressed: () {
+                        _scaffoldKey.currentState?.openDrawer();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_circle_right,
+                        color: Colors.amberAccent,
+                      )),
+                ),
+              ],
             );
           } else {
             return const Center(
