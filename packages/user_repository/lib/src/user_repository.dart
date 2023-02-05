@@ -16,11 +16,6 @@ class UserRepository {
     await _usersRef.doc(user.uuid).set(user);
   }
 
-  Future<User> getUserFromFirestoreByUid(String uuid) async {
-    final docSnap = await _usersRef.doc(uuid).get();
-    return User.fromJson(docSnap.data()! as Map<String, dynamic>);
-  }
-
   Stream<List<User>> getUsersStream() {
     return _firebaseFirestore.collection('users').snapshots().map(
         (event) => event.docs.map((e) => User.fromJson(e.data())).toList());
