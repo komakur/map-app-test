@@ -2,12 +2,13 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocation_repository/geolocation_repository.dart';
-import 'package:map_app_test/user/bloc/user_bloc.dart';
 import 'package:user_repository/user_repository.dart';
 
+import 'package:map_app_test/app_theme.dart';
 import 'package:map_app_test/auth/bloc/auth_bloc.dart';
 import 'package:map_app_test/auth/view/pages/sign_up_page.dart';
 import 'package:map_app_test/geolocation/bloc/geolocaiton_bloc.dart';
+import 'package:map_app_test/user/bloc/user_bloc.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -23,10 +24,8 @@ class App extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthBloc>(
-            // TODO: change repositories values to context.read
             create: (context) => AuthBloc(
-              authRepository: RepositoryProvider.of<AuthRepository>(context),
-              userRepository: RepositoryProvider.of<UserRepository>(context),
+              authRepository: context.read<AuthRepository>(),
             ),
           ),
           BlocProvider<GeolocaitonBloc>(
@@ -41,7 +40,8 @@ class App extends StatelessWidget {
                   UserBloc(userRepository: context.read<UserRepository>()))
         ],
         child: MaterialApp(
-          theme: ThemeData.light(),
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme().theme,
           home: const SignUpPage(),
         ),
       ),
