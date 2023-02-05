@@ -42,7 +42,6 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black12,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: BlocConsumer<AuthBloc, AuthState>(
@@ -65,53 +64,53 @@ class _SignInPageState extends State<SignInPage> {
               return const CircularProgressIndicator();
             }
             if (state is UnAuthenticated) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/logo_image.png'),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            controller: _emailController,
-                            decoration: const InputDecoration(
-                              hintText: 'Your email',
-                            ),
+              return ListView(
+                shrinkWrap: true,
+                children: [
+                  Image.asset('assets/images/logo_image.png'),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: const InputDecoration(
+                            hintText: 'Your email',
                           ),
-                          const SizedBox(height: 15.0),
-                          TextFormField(
-                            controller: _passwordController,
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                              hintText: 'Your password',
-                            ),
+                        ),
+                        const SizedBox(height: 15.0),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            hintText: 'Your password',
                           ),
-                          const SizedBox(height: 15.0),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: FormElevatedButton(
-                              text: 'Sign In',
-                              onPressed: () =>
-                                  _signInUserWithEmailAndPassword(context),
-                            ),
+                        ),
+                        const SizedBox(height: 15.0),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: FormElevatedButton(
+                            text: 'Sign In',
+                            onPressed: () =>
+                                _signInUserWithEmailAndPassword(context),
                           ),
-                          IconButton(
-                            onPressed: () {
-                              _authenticateWithGoogle(context);
-                            },
-                            icon: Image.network(
-                              "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png",
-                              height: 30,
-                              width: 30,
-                            ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            _authenticateWithGoogle(context);
+                          },
+                          icon: Image.network(
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png",
+                            height: 30,
+                            width: 30,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 15.0),
-                    RichText(
+                  ),
+                  const SizedBox(height: 15.0),
+                  Center(
+                    child: RichText(
                       text: TextSpan(
                         children: [
                           const TextSpan(text: 'Dont have an account? '),
@@ -129,9 +128,9 @@ class _SignInPageState extends State<SignInPage> {
                           )
                         ],
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               );
             }
             return const SizedBox.shrink();
