@@ -24,7 +24,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<LoadUsers>(
       (event, emit) async {
         _userSubscription?.cancel();
-        final users = await _userRepository
+        final users = _userRepository
             .getUsersStream()
             .listen((users) => add(UpdateUsers(users)));
       },

@@ -18,8 +18,6 @@ class GeolocaitonBloc extends Bloc<GeolocaitonEvent, GeolocaitonState> {
     on<UpdateGeolocation>(_onGeolocaitonUpdate);
   }
 
-  void _onStarted(LoadGeolocation event, Emitter<GeolocaitonState> emit) {}
-
   Future<void> _onGeolocationLoad(
       LoadGeolocation event, Emitter<GeolocaitonState> emit) async {
     _geolocationSubscription?.cancel();

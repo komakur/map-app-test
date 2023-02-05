@@ -1,21 +1,17 @@
-import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:equatable/equatable.dart';
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:user_repository/user_repository.dart';
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
-  final UserRepository _userRepository;
 
   AuthBloc({
     required AuthRepository authRepository,
-    required UserRepository userRepository,
   })  : _authRepository = authRepository,
-        _userRepository = userRepository,
         super(UnAuthenticated()) {
     on<SignUpRequested>(_onSignUpRequested);
     on<SignInRequested>(_onSignInRequested);

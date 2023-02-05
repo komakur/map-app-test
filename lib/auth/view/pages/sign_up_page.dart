@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:map_app_test/auth/bloc/auth_bloc.dart';
 import 'package:map_app_test/auth/view/pages/sign_in_page.dart';
+import 'package:map_app_test/auth/view/widgets/form_elevated_button.dart';
 import 'package:map_app_test/map/map_screen.dart';
 import 'package:map_app_test/user/bloc/user_bloc.dart';
 
@@ -86,11 +87,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           TextFormField(
                             controller: _emailController,
                             style: const TextStyle(fontSize: 16.0, height: 1),
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
+                            decoration: const InputDecoration(
                               hintText: 'Your email',
                             ),
                           ),
@@ -98,28 +95,17 @@ class _SignUpPageState extends State<SignUpPage> {
                           TextFormField(
                             controller: _passwordController,
                             obscureText: true,
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
+                            decoration: const InputDecoration(
                               hintText: 'Your password',
                             ),
                           ),
                           const SizedBox(height: 15.0),
                           SizedBox(
                             width: MediaQuery.of(context).size.width,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(double.maxFinite, 46.0),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                              ),
-                              onPressed: () {
-                                _createUserWithEmailAndPassword(context);
-                              },
-                              child: const Text('Sign Up'),
+                            child: FormElevatedButton(
+                              text: 'Sign Up',
+                              onPressed: () =>
+                                  _createUserWithEmailAndPassword(context),
                             ),
                           ),
                           IconButton(

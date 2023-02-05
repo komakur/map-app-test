@@ -13,11 +13,19 @@ class UserRepository {
   }
 
   Future<void> addUserToFirestore(User user) async {
-    await _usersRef.doc(user.uuid).set(user);
+    try {
+      await _usersRef.doc(user.uuid).set(user);
+    } catch (e) {
+      throw e;
+    }
   }
 
   Stream<List<User>> getUsersStream() {
-    return _firebaseFirestore.collection('users').snapshots().map(
-        (event) => event.docs.map((e) => User.fromJson(e.data())).toList());
+    try {
+      return _firebaseFirestore.collection('users').snapshots().map(
+          (event) => event.docs.map((e) => User.fromJson(e.data())).toList());
+    } catch (e) {
+      throw e;
+    }
   }
 }

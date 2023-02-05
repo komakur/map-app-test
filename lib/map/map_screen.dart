@@ -1,14 +1,16 @@
 import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:user_repository/user_repository.dart';
+
 import 'package:map_app_test/geolocation/bloc/geolocaiton_bloc.dart';
 import 'package:map_app_test/geolocation/location_service.dart';
 import 'package:map_app_test/profile_sidebar/profile_sidebar.dart';
 import 'package:map_app_test/user/bloc/user_bloc.dart';
-import 'package:user_repository/user_repository.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -80,8 +82,11 @@ class _MapPageState extends State<MapPage> {
             return const Center(child: CircularProgressIndicator());
           } else if (geolocationState is GeolocaitonLoaded) {
             return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
                       child: TextFormField(
@@ -96,7 +101,10 @@ class _MapPageState extends State<MapPage> {
                       onPressed: () {
                         LocationService().getPlace(_searchController.text);
                       },
-                      icon: const Icon(Icons.search),
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.blueAccent,
+                      ),
                     ),
                   ],
                 ),
