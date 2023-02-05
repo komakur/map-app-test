@@ -1,16 +1,11 @@
 # map_app_test
 
-App  that shows current users location on  a map
+## App  that shows users current location on a map
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### In the test task I have implemented:
+ 
+1. Registration with Google and providing email and password;
+2. The Google Maps is real time changing (it listens to any location changes and to any changes in the Firestore);
+3. Clicking on users markers provide short info about user accociated with the marker;
+4. In the left center side of a MapScreen lays out a button which navigates to a authorised user info (here the user can ***log out***);
+5. The FloatingButton serves as a navigator to the user current position on a Google Maps;
